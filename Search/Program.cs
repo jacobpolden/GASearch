@@ -42,7 +42,7 @@ namespace Search
                     accumAllFitness = accumAllFitness + person.Fitness;
                 }
                 accumTopFitness = accumTopFitness + topFitness;
-                Console.WriteLine($"Fittest DNA \"{fittestDna}\"");
+                Console.WriteLine($"Fittest DNA \"{fittestDna}\" -- {topFitness}");
                 population.EvolvePopulation();
             }
             Console.WriteLine("************SUCCESS************");
@@ -62,9 +62,7 @@ namespace Search
         {
             Genes = new char[length];
             for (var i = 0; i < length; i++)
-            {
                 Genes[i] = (char)randomGenerator.Next(32, 122);
-            }
         }
 
         public Person(char[] genes)
@@ -105,23 +103,19 @@ namespace Search
             for (var i = 0; i < partnerGenesLength; i++)
             {
                 if (i > midpoint)
-                {
                     genes[i] = partner.Genes[i];
-                }
                 else
-                {
                     genes[i] = Genes[i];
-                }
+
             }
 
             var child = new Person(genes);
 
-            for (int i = 0; i < child.Genes.Length; i++)
+            for (var i = 0; i < child.Genes.Length; i++)
             {
                 if (random.Next(0, 100) <= Configuration.MutationRate)
-                {
                     child.Genes[i] = (char)random.Next(32, 122);
-                }
+
             }
 
             return child;
@@ -146,7 +140,6 @@ namespace Search
         public void EvolvePopulation()
         {
             var matingPool = new List<Person>();
-            //  var survivors = People.Where(person => person.Fitness > 0).ToList();
             var survivors = People.ToList();
             var maxFitness = survivors.OrderByDescending(person => person.Fitness).First().Fitness;
 
@@ -154,9 +147,8 @@ namespace Search
             {
                 var normalisedFitness = person.Fitness / maxFitness;
                 for (var i = 0; i < normalisedFitness * 100; i++)
-                {
                     matingPool.Add(person);
-                }
+
             }
 
             for (var i = 0; i < People.Length; i++)
